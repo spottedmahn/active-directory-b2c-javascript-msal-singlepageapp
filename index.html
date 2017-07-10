@@ -21,7 +21,9 @@
 <body>
     <!-- bluebird only needed if this page needs to run on Internet Explorer -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.3.4/bluebird.min.js" class="pre"></script>
-    <script src="https://secure.aadcdn.microsoftonline-p.com/lib/0.1.1/js/msal.min.js"></script>
+    <!--<script src="https://secure.aadcdn.microsoftonline-p.com/lib/0.1.1/js/msal.min.js"></script>-->
+    <script src="msal.js"></script>
+    <!--<script src="https://raw.githubusercontent.com/AzureAD/microsoft-authentication-library-for-js/master/out/msal.js"></script>-->
     <script src="https://code.jquery.com/jquery-3.2.1.min.js" class="pre"></script>
 
     <h2>Getting an access token with Azure AD B2C and calling a Web API</h2>
@@ -34,13 +36,19 @@
     <pre class="response"></pre>
 
     <script class="pre">
-        // The current application coordinates were pre-registered in a B2C tenant.
+        //The current application coordinates were pre-registered in a B2C tenant.
         var applicationConfig = {
             clientID: 'e760cab2-b9a1-4c0d-86fb-ff7084abd902',
             authority: "https://login.microsoftonline.com/tfp/fabrikamb2c.onmicrosoft.com/b2c_1_susi",
             b2cScopes: ["https://fabrikamb2c.onmicrosoft.com/demoapi/demo.read"],
             webApi: 'https://fabrikamb2chello.azurewebsites.net/hello',
         };
+        // var applicationConfig = {
+        //     clientID: 'd0a1dacb-a76f-4cd3-8055-d387a7d821ca',
+        //     authority: "https://login.microsoftonline.com/tfp/spottedmahnb2c.onmicrosoft.com/B2C_1_Sign-Up_or_Sign-In",
+        //     b2cScopes: ["https://spottedmahnb2c.onmicrosoft.com/b2c-test-1/demo.read"],
+        //     webApi: 'http://localhost:5000/hello',
+        // };
     </script>
 
     <script>
@@ -54,6 +62,8 @@
                 clientApplication.acquireTokenSilent(applicationConfig.b2cScopes).then(function (accessToken) {
                     updateUI();
                 }, function (error) {
+                    console.error(error);
+                    logMessage(error);
                     clientApplication.acquireTokenPopup(applicationConfig.b2cScopes).then(function (accessToken) {
                         updateUI();
                     }, function (error) {
