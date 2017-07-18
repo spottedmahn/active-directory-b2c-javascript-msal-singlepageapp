@@ -1285,6 +1285,13 @@ var Msal;
             this._cacheStorage.removeAcquireTokenEntries(Msal.Constants.authority + Msal.Constants.resourceDelimeter, Msal.Constants.renewStatus);
             this._cacheStorage.resetCacheItems();
         };
+        //test
+        UserAgentApplication.prototype.clearAccessTokens = function () {
+            var accessTokenItems = this._cacheStorage.getAllAccessTokens(Msal.Constants.clientId, Msal.Constants.authority);
+            for (var i = 0; i < accessTokenItems.length; i++) {
+                this._cacheStorage.removeItem(JSON.stringify(accessTokenItems[i].key));
+            }
+        };
         UserAgentApplication.prototype.openPopup = function (urlNavigate, title, popUpWidth, popUpHeight) {
             try {
                 var winLeft = window.screenLeft ? window.screenLeft : window.screenX;
@@ -1650,6 +1657,7 @@ var Msal;
                     else {
                         authenticationRequest_1 = new Msal.AuthenticationRequestParameters(newAuthority, _this.clientId, scopes, ResponseTypes.id_token_token, _this.redirectUri);
                     }
+                    //test
                     var cacheResult = _this.getCachedToken(authenticationRequest_1, userObject_1);
                     if (cacheResult) {
                         if (cacheResult.token) {

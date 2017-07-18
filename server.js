@@ -28,6 +28,10 @@ app.get('/msal.js', function (req, res) {
     res.sendFile(path.join(__dirname + '/msal.js'));
 });
 
+app.get('/jwt-decode.js', function (req, res) {
+    res.sendFile(path.join(__dirname + '/jwt-decode.js'));
+});
+
 // Start the server.
 app.listen(port);
 console.log('Listening on port ' + port + '...'); 
