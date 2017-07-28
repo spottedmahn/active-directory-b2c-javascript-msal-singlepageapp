@@ -20,8 +20,17 @@ app.use("/out", express.static(path.join(__dirname, "../../out")));
 app.use("/bower_components", express.static(path.join(__dirname, 'bower_components')));
 
 // Set up our one route to the index.html file.
-app.get('*', function (req, res) {
+// Set up our one route to the index.html file.
+app.get('/', function (req, res) {
     res.sendFile(path.join(__dirname + '/index.html'));
+});
+
+app.get('/msal.js', function (req, res) {
+    res.sendFile(path.join(__dirname + '/msal.js'));
+});
+
+app.get('/favicon.ico', function (req, res) {
+    res.sendFile(path.join(__dirname + '/favicon.ico'));
 });
 
 // Start the server.
