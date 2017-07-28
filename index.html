@@ -55,26 +55,37 @@
         "use strict";
         var loggedIn = false;
 
+        window.onload = function () {
+            console.info('PAGE LOADED');
+        }
+
+        //new Msal.Storage('localStorage');
+
         var clientApplication = new Msal.UserAgentApplication(applicationConfig.clientID, applicationConfig.authority, (errorDesc, token, error, tokenType) => {
             // Called after loginRedirect or acquireTokenPopup
             loggedIn = true;
         }, { cacheLocation: 'localStorage' });
 
+        console.info('cacheLocation (A): ' + clientApplication.cacheLocation);
+
         if (loggedIn) {
-            console.info('cacheLocation: ' + clientApplication.cacheLocation);
+            console.info('cacheLocation (B): ' + clientApplication.cacheLocation);
+            //updateUI();
 
             this.clientApplication.acquireTokenSilent(applicationConfig.b2cScopes).then(async accessToken => {
-                console.debug('Got an access token');
+                console.debug('Got an access token - 1');
 
                 updateUI();
             });
         }
-        
+
         function login() {
             clientApplication.loginRedirect(applicationConfig.b2cScopes);
         }
 
         function updateUI() {
+            console.info('Updating the UI');
+            
             var userName = clientApplication.getUser().name;
             logMessage("User '" + userName + "' logged-in");
             var authButton = document.getElementById('auth');
@@ -88,6 +99,7 @@
 
         function callApi() {
             clientApplication.acquireTokenSilent(applicationConfig.b2cScopes).then(function (accessToken) {
+                console.debug('Got an access token - 2');
                 callApiWithAccessToken(accessToken);
             }, function (error) {
                 clientApplication.acquireTokenPopup(applicationConfig.b2cScopes).then(function (accessToken) {
