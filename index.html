@@ -1,4 +1,5 @@
 <html>
+
 <head>
     <title>Calling a Web API as a user authenticated with Msal.js app</title>
     <style>
@@ -18,6 +19,7 @@
         }
     </style>
 </head>
+
 <body>
     <!-- bluebird only needed if this page needs to run on Internet Explorer -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bluebird/3.3.4/bluebird.min.js" class="pre"></script>
@@ -46,30 +48,30 @@
             authority: "https://login.microsoftonline.com/tfp/spottedmahnb2c.onmicrosoft.com/B2C_1_Sign-Up_or_Sign-In",
             b2cScopes: ["https://spottedmahnb2c.onmicrosoft.com/demoapi/demo.read"],
             webApi: 'http://localhost:5000/hello',
-        };        
+        };
     </script>
 
     <script>
         "use strict";
+        var loggedIn = false;
+
         var clientApplication = new Msal.UserAgentApplication(applicationConfig.clientID, applicationConfig.authority, (errorDesc, token, error, tokenType) => {
             // Called after loginRedirect or acquireTokenPopup
-            console.info(this.clientApplication);
+            loggedIn = true;
         }, { cacheLocation: 'localStorage' });
 
-        function login() {
-            clientApplication.loginPopup(applicationConfig.b2cScopes).then(function (idToken) {
-                clientApplication.acquireTokenSilent(applicationConfig.b2cScopes).then(function (accessToken) {
-                    updateUI();
-                }, function (error) {
-                    clientApplication.acquireTokenPopup(applicationConfig.b2cScopes).then(function (accessToken) {
-                        updateUI();
-                    }, function (error) {
-                        logMessage("Error acquiring the popup:\n" + error);
-                    });
-                })
-            }, function (error) {
-                logMessage("Error during login:\n" + error);
+        if (loggedIn) {
+            console.info('cacheLocation: ' + clientApplication.cacheLocation);
+
+            this.clientApplication.acquireTokenSilent(applicationConfig.b2cScopes).then(async accessToken => {
+                console.debug('Got an access token');
+
+                updateUI();
             });
+        }
+        
+        function login() {
+            clientApplication.loginRedirect(applicationConfig.b2cScopes);
         }
 
         function updateUI() {
@@ -120,7 +122,7 @@
         function logMessage(s) {
             document.body.querySelector('.response').appendChild(document.createTextNode('\n' + s));
         }
-
     </script>
 </body>
+
 </html>
