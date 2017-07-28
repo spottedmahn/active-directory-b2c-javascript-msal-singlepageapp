@@ -1070,7 +1070,7 @@ var Msal;
                 localStorage: "localStorage",
                 sessionStorage: "sessionStorage"
             };
-            this._cacheLocation = "sessionStorage";
+            this._cacheLocation = "localStorage";
             this._interactionModes = {
                 popUp: "popUp",
                 redirect: "redirect"
